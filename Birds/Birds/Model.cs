@@ -76,6 +76,9 @@ public class Model
         
         // Classify single image
         ClassifySingleImage(mlContext, testSet, trainedModel);
+        
+        // Classifying multiple images
+        ClassifyImages(mlContext, testSet, trainedModel);
     }
     
     public static IEnumerable<ImageData> LoadImagesFromDirectory(string folder, bool useFolderNameAsLabel = true)
@@ -136,5 +139,20 @@ public class Model
         // Output prediction 
         Console.WriteLine("Classifying single image");
         OutputPrediction(prediction);
+    }
+
+    public static void ClassifyImages(MLContext mlContext, IDataView data, ITransformer trainedModel)
+    {
+        // IDataView containing predictions
+        IDataView predictionData = trainedModel.Transform(data);
+        
+        // Convert data into IEnumerable
+        IEnumerable<ModelOutput> predictions =
+            mlContext.Data.CreateEnumerable<ModelOutput>(predictionData, reuseRowObject: true).Take(10);
+        
+        // Iterate and output 
+        Console.WriteLine("Classifying multiple images");
+        foreach (var prediction in predictions)
+            OutputPrediction(prediction);
     }
 }
