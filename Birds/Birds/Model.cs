@@ -247,4 +247,25 @@ public class Model
         // Iterate and output 
         return predictions;
     }
+
+    public void SaveModel(string path, string name)
+    {
+        if (_trainSet is not null)
+            _mlContext.Model.Save(_trainedModel, _trainSet.Schema, name);
+        else
+        {
+            Console.WriteLine();
+            Console.WriteLine("-----------------------------------------------------");
+            Console.WriteLine("MODEL NOT TRAINED!");
+            Console.WriteLine("-----------------------------------------------------");
+            Console.WriteLine();
+        }
+    }
+
+    public DataViewSchema LoadModel(string path)
+    {
+        DataViewSchema modelSchema;
+        _trainedModel = _mlContext.Model.Load(path, out modelSchema);
+        return modelSchema;
+    }
 }
