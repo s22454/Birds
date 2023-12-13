@@ -251,7 +251,11 @@ public class Model
     public void SaveModel(string path, string name)
     {
         if (_trainSet is not null)
-            _mlContext.Model.Save(_trainedModel, _trainSet.Schema, name);
+            _mlContext.Model.Save(
+                _trainedModel, 
+                _trainSet.Schema, 
+                Path.Combine(path, string.Concat(name, ".zip"))
+                );
         else
         {
             Console.WriteLine();

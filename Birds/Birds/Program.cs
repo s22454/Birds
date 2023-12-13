@@ -8,6 +8,7 @@ public class Program
     private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../"));
     private static string workspaceRelativePath = Path.Combine(projectDirectory, "Workspace");
     private static string assetsRelativePath = Path.Combine(projectDirectory, "Assets");
+    private static string modelsRelativePath = Path.Combine(projectDirectory, "Models");
     
     // Manual testing 
     private static string testingRelativePath = Path.Combine(projectDirectory, "Test");
@@ -62,7 +63,7 @@ public class Program
                         Console.WriteLine("SAVING THE MODEL");
                         Console.WriteLine("-----------------------------------------------------");
                         Console.WriteLine();
-                        if (input != null) model.SaveModel(assetsRelativePath, input);
+                        if (input != null) model.SaveModel(modelsRelativePath, input);
                     }
                     break;
                 
