@@ -31,20 +31,8 @@ public class Model
         
     public void TrainModel(string dataPath)
     {
-        // Load image data
-        IEnumerable<ImageData> images = LoadImagesFromDirectory(folder: dataPath, useFolderNameAsLabel: true);
-        IDataView imageData = _mlContext.Data.LoadFromEnumerable(images);
-        
-        // Preprocess that data 
-        IDataView preProcessedData = PreProcessData(imageData, dataPath);
-        
-        // Split dataset into training, validation and test sets
-        TrainTestData trainSplit = _mlContext.Data.TrainTestSplit(data: preProcessedData, testFraction: .3);
-        TrainTestData validationTestSplit = _mlContext.Data.TrainTestSplit(trainSplit.TestSet);
-
-        _trainSet = trainSplit.TrainSet;
-        _validationSet = validationTestSplit.TrainSet;
-        _testSet = validationTestSplit.TestSet;
+        // Prepare test, train and validation data sets 
+        PrepareTestTrainDataSets(dataPath);
         
         // ImageClassificationTrainer
         var classifierOptions = new ImageClassificationTrainer.Options()
@@ -60,8 +48,15 @@ public class Model
         };
         
         // Training pipeline 
-        var trainingPipeline = _mlContext.MulticlassClassification.Trainers.ImageClassification(classifierOptions)
-            .Append(_mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+        var trainingPipeline = _mlContext
+            .MulticlassClassification
+            .Trainers
+            .ImageClassification(classifierOptions)
+            .Append(_mlContext
+                .Transforms
+                .Conversion
+                .MapKeyToValue("PredictedLabel")
+            );
         
         // Train the model
         _trainedModel = trainingPipeline.Fit(_trainSet);
@@ -102,6 +97,25 @@ public class Model
                 Label = label
             };
         }
+    }
+    
+    // Prepare test, train and validation data sets 
+    private void PrepareTestTrainDataSets(string dataPath)
+    {
+        // Load image data
+        IEnumerable<ImageData> images = LoadImagesFromDirectory(folder: dataPath, useFolderNameAsLabel: true);
+        IDataView imageData = _mlContext.Data.LoadFromEnumerable(images);
+        
+        // Preprocess that data 
+        IDataView preProcessedData = PreProcessData(imageData, dataPath);
+        
+        // Split dataset into training, validation and test sets
+        TrainTestData trainSplit = _mlContext.Data.TrainTestSplit(data: preProcessedData, testFraction: .3);
+        TrainTestData validationTestSplit = _mlContext.Data.TrainTestSplit(trainSplit.TestSet);
+
+        _trainSet = trainSplit.TrainSet;
+        _validationSet = validationTestSplit.TrainSet;
+        _testSet = validationTestSplit.TestSet;
     }
 
     public IDataView PrepareDataFromDirectory(string dataPath)
@@ -145,14 +159,14 @@ public class Model
     public void TestModel()
     {
         // Write error if testSet wasn't set
-        if (_testSet is null)
+        if (_validationSet is null)
         {
             Console.WriteLine("ERROR: TestSet is null!");
             return;
         }
         
         // Make predictions
-        IEnumerable<ModelOutput> predictions = ClassifyImages(_testSet);
+        IEnumerable<ModelOutput> predictions = ClassifyImages(_validationSet);
         
         // Output predictions and stats
         Console.WriteLine();
@@ -266,10 +280,12 @@ public class Model
         }
     }
 
-    public DataViewSchema LoadModel(string path)
+    public DataViewSchema LoadModel(string path, string dataPath)
     {
+        Console.WriteLine(path);
         DataViewSchema modelSchema;
         _trainedModel = _mlContext.Model.Load(path, out modelSchema);
+        PrepareTestTrainDataSets(dataPath);
         return modelSchema;
     }
 }

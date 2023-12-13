@@ -69,20 +69,49 @@ public class Program
                 
                 // Load model
                 case "3":
-                    Console.WriteLine();
-                    Console.WriteLine("-----------------------------------------------------");
-                    Console.WriteLine("Select the model");
-                    Console.WriteLine("-----------------------------------------------------");
-                    Console.Write("Path: ");
-                    input = Console.ReadLine();
-                        
+                    bool modelSelected = false;
+                    string path = "";
+
+                    // Do while user won't choose correct model path
+                    while (!modelSelected)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("-----------------------------------------------------");
+                        Console.WriteLine("Select the model");
+                        Console.WriteLine("-----------------------------------------------------");
+
+                        // List available models 
+                        int i = 0;
+                        Dictionary<string, string> modelsToChoose = new Dictionary<string, string>();
+                        foreach (string modelName in Directory.GetFiles(modelsRelativePath))
+                        {
+                            i++;
+                            modelsToChoose.Add(i.ToString(), modelName);
+                            Console.WriteLine(i + " - " + modelName);
+                        }
+
+                        // Read user's input 
+                        Console.Write("Option: ");
+                        input = Console.ReadLine();
+
+                        // Check dose model exists 
+                        if (input != null && modelsToChoose.ContainsKey(input))
+                        {
+                            path = modelsToChoose[input];
+                            modelSelected = true;
+                        }
+                    }
+
                     Console.WriteLine();
                     Console.WriteLine("-----------------------------------------------------");
                     Console.WriteLine("LOADING THE MODEL");
                     Console.WriteLine("-----------------------------------------------------");
                     Console.WriteLine();
-                    if (input != null) model.LoadModel(input);
+                    
+                    // Load model 
                     model = Model.GetInstance();
+                    model.LoadModel(path, assetsRelativePath);
+                    
                     break;
                 
                 // Test model on test set
