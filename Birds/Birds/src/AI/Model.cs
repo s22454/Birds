@@ -159,14 +159,14 @@ public class Model
     public void TestModel()
     {
         // Write error if testSet wasn't set
-        if (_validationSet is null)
+        if (_testSet is null)
         {
             Console.WriteLine("ERROR: TestSet is null!");
             return;
         }
         
         // Make predictions
-        IEnumerable<ModelOutput> predictions = ClassifyImages(_validationSet);
+        IEnumerable<ModelOutput> predictions = ClassifyImages(_testSet);
         
         // Output predictions and stats
         Console.WriteLine();

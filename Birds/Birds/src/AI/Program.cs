@@ -6,7 +6,6 @@ public class Program
 {
     // Paths and pre-initialized variables
     private static string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../"));
-    private static string workspaceRelativePath = Path.Combine(projectDirectory, "Workspace");
     private static string assetsRelativePath = Path.Combine(projectDirectory, "Assets");
     private static string modelsRelativePath = Path.Combine(projectDirectory, "Models");
     

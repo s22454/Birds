@@ -24,7 +24,6 @@
     <ItemGroup>
       <Folder Include="Assets\" />
       <Folder Include="Models\" />
-      <Folder Include="Workspace\" />
     </ItemGroup>
     
 </Project>
