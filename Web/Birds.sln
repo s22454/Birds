@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{CE6C014B-902F-4854-807C-1BD9A3144066}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birds", "Birds\Birds\Birds.csproj", "{CEF812B5-7B07-4811-B2E4-0EACCB402829}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE6C014B-902F-4854-807C-1BD9A3144066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE6C014B-902F-4854-807C-1BD9A3144066}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE6C014B-902F-4854-807C-1BD9A3144066}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE6C014B-902F-4854-807C-1BD9A3144066}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEF812B5-7B07-4811-B2E4-0EACCB402829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEF812B5-7B07-4811-B2E4-0EACCB402829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEF812B5-7B07-4811-B2E4-0EACCB402829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEF812B5-7B07-4811-B2E4-0EACCB402829}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
