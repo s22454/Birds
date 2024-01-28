@@ -111,6 +111,7 @@ public class Program
                     
                     IDataView manualTestData = model.PrepareDataFromDirectory(input);
                     ModelOutput predictionsResults = model.ClassifySingleImage(manualTestData);
+                    
                     Console.WriteLine();
                     Console.WriteLine("-----------------------------------------------------");
                     Console.WriteLine("Manual test");

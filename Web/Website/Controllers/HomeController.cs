@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.ML;
 using WebApplication1.ML;
 using WebApplication1.Models;
 
@@ -8,7 +9,7 @@ namespace WebApplication1.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private string _modelPath = "ML/BirdModel24";
+    private string _modelPath = "ML/BirdModel24.model";
     private Model? _model = null;
 
     public HomeController(ILogger<HomeController> logger)
@@ -48,17 +49,47 @@ public class HomeController : Controller
             Directory.CreateDirectory(uploadsFolder);
         }
         
-        var uniqueFileName = $"{Guid.NewGuid()}_{file.FileName}";
-        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+        // Create request id
+        Guid requestId = Guid.NewGuid();
+        
+        // Create request sub-folder
+        DirectoryInfo directoryInfo = Directory.CreateDirectory(Path.Combine(uploadsFolder, requestId.ToString()));
+        
+        // Create unique file name
+        string uniqueFileName = $"{requestId.ToString()}_{file.FileName}";
+        
+        // Find file path
+        var filePath = Path.Combine(directoryInfo.ToString(), uniqueFileName);
 
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        // Copy img to its unique directory
+        await using (var stream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(stream);
         }
         
-        var imageUrl = Path.Combine("uploads", uniqueFileName);
-        return Ok(imageUrl);
+        // Get img url
+        var imageUrl = Path.Combine(directoryInfo.ToString(), uniqueFileName);
+
+        // Return error if model wasn't loaded
+        if (_model is null) return Problem("Model not loaded");
         
-        return Ok("Plik został przesłany i zapisany.");
+        // Get image folder
+        string? imgDir = Path.GetDirectoryName(imageUrl);
+        
+        // Return error if img directory wasn't found
+        if (imgDir is null) return Problem("Error with loading image");
+        
+        // Get predictions from model
+        IDataView manualTestData = _model.PrepareDataFromDirectory(imgDir);
+        ModelOutput predictionsResults = _model.ClassifySingleImage(manualTestData);
+
+        // Prepare result
+        string res = predictionsResults
+            .PredictedLabel
+            .Split(".")[1]
+            .Replace("_", " ");
+        
+        // Return predictions results
+        return Ok(res);
     }
 }
