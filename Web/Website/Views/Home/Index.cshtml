@@ -2,16 +2,25 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="main-section">
     
-    <img id="uploadedImage" src="#" alt="Wgrany obrazek">
+    @* Birds list *@
+    <div class="birds-list-section">
+        .
+    </div>
     
-    <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="fileInput">
-        <input type="submit" value="Prześlij plik">
-    </form>
+    <div class="text-center">
 
-    <div id="result"></div>
+        <img id="uploadedImage" src="#" alt="Wgrany obrazek">
+
+        <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput">
+            <input type="submit" value="Prześlij plik">
+        </form>
+
+        <div id="result"></div>
+
+    </div>
     
 </div>
 

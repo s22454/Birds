@@ -18,5 +18,24 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+
+}
+
+.main-section-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.main-section {
+  width: 100vw;
+  height: 100%;
+}
+
+.birds-list-section {
+  display: flex;
+  width: 20%;
+  height: 100%;
+  background-color: #0c63e4;
+  opacity: 1;
 }
