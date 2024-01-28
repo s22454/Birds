@@ -3,39 +3,67 @@
 }
 
 <div class="text-center">
+    
+    <img id="uploadedImage" src="#" alt="Wgrany obrazek">
+    
     <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
         <input type="file" name="file" id="fileInput">
         <input type="submit" value="Prześlij plik">
     </form>
 
     <div id="result"></div>
-    <img id="uploadedImage" src="#" alt="Wgrany obrazek" style="display: none;">
+    
 </div>
 
-<script>
-    const apiUrl = '/api/checkimage';
-    
-    document.getElementById('uploadForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        
-        let formData = new FormData();
-        const fileInput = document.getElementById('fileInput');
-        
-        if (fileInput.files.length > 0) {
-            formData.append('file', fileInput.files[0]);
+@section Scripts
+{
+    @* Set image preview *@
+    <script>
+        function previewImage() {
+            var fileInput = document.getElementById('fileInput');
+            var uploadedImage = document.getElementById('uploadedImage');
             
-            fetch('/api/checkimage', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('result').textContent = data;
-            })
-            .catch(error => {
-                console.error('Błąd:', error);
-            });
-        }
-    });
+            var file = fileInput.files[0];
+            if (file) {
+                var reader = new FileReader();
 
-</script>
+                reader.onload = function (e) {
+                    uploadedImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+    @* Classify image *@
+    <script>
+        const apiUrl = '/api/checkimage';
+        
+        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            previewImage();
+
+            let formData = new FormData();
+            const fileInput = document.getElementById('fileInput');
+            
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+                
+                fetch('/api/checkimage', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('result').textContent = data;
+                })
+                .catch(error => {
+                    console.error('Błąd:', error);
+                });
+            }
+        });
+    
+    </script>
+}
