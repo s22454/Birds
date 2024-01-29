@@ -25,7 +25,7 @@ public class BirdsRepository : IBirdsRepository
             await _birdsContext.Predictions
                 .Include(x => x.Photo)
                 .ToListAsync();
-        return result;
+        return result.OrderByDescending(x => x.TimeSpent).ToList();
     }
 
     public async Task<string> PredictImage(IFormFile file)
@@ -39,37 +39,37 @@ public class BirdsRepository : IBirdsRepository
         {
             await file.CopyToAsync(memoryStream);
             fileBytes = memoryStream.ToArray();
-
-            string folderPath = Path.Combine(Path.GetTempPath(), predictionId.ToString());
-            DirectoryInfo directoryInfo =
-                Directory.CreateDirectory(folderPath);
-
-            string uniqueFileName = $"{predictionId.ToString()}_{file.FileName}";
-            string filePath = Path.Combine(directoryInfo.ToString(), uniqueFileName);
-
-            await using (FileStream fileStream = new(filePath, FileMode.Create))
-            {
-                fileStream.Seek(0, SeekOrigin.Begin);
-                await memoryStream.CopyToAsync(fileStream);
-            }
-
-            string imageUrl = Path.Combine(directoryInfo.ToString(), uniqueFileName);
-            string? imgDir = Path.GetDirectoryName(imageUrl);
-
-            IDataView manualTestData = _model.PrepareDataFromDirectory(imgDir);
-            predictionsResults = _model.ClassifySingleImage(manualTestData);
-
-            Directory.Delete(imgDir, true);
         }
+        
+        string folderPath = Path.Combine(Path.GetTempPath(), predictionId.ToString());
+        DirectoryInfo directoryInfo =
+            Directory.CreateDirectory(folderPath);
+        
+        string uniqueFileName = $"{predictionId.ToString()}_{file.FileName}";
+        string filePath = Path.Combine(directoryInfo.ToString(), uniqueFileName);
+        
+        await using (FileStream fileStream = new(filePath, FileMode.Create))
+        {
+            fileStream.Seek(0, SeekOrigin.Begin);
+            await file.CopyToAsync(fileStream);
+        }
+
+        string imageUrl = Path.Combine(directoryInfo.ToString(), uniqueFileName);
+        string? imgDir = Path.GetDirectoryName(imageUrl);
+        
+        IDataView manualTestData = _model.PrepareDataFromDirectory(imgDir);
+        predictionsResults = _model.ClassifySingleImage(manualTestData);
+        
+        Directory.Delete(imgDir, true);
 
         string birdName = predictionsResults
             .PredictedLabel
             .Split(".")[1]
             .Replace("_", " ");
-
+        
         try
         {
-            Guid model = 
+            Guid model =
                 await _birdsContext.Models
                     .Where(x => x.Name == DataLoader.ModelName)
                     .Select(x => x.Id)

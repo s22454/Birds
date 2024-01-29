@@ -38,10 +38,12 @@ public class BirdsController : Controller
         return View(viewModel);
     }
 
-    [HttpPost("delete")]
+    [HttpPost("~/api/deleteimage")]
     public async Task<IActionResult> DeletePhoto(Guid id)
     {
-        return RedirectToAction("List");
+        await _birdsRepository.DeletePhoto(id);
+
+        return Ok("Usunięto");
     }
 
     [HttpPost("~/api/checkimage")]
