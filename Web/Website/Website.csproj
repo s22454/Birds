@@ -21,4 +21,8 @@
       <Folder Include="uploads\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\Data\birdsList.txt" />
+    </ItemGroup>
+
 </Project>

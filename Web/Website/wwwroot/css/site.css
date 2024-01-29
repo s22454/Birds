@@ -28,14 +28,24 @@ body {
 }
 
 .main-section {
+  display: flex;
   width: 100vw;
-  height: 100%;
+  height: 88vh;
+  overflow: hidden;
 }
+
+/* Birds list */
 
 .birds-list-section {
   display: flex;
-  width: 20%;
+  width: 20vw;
   height: 100%;
   background-color: #0c63e4;
-  opacity: 1;
+}
+
+#birdsList {
+  overflow-y: auto;
+  white-space: nowrap;
+  width: 100%;
+  font-size: 14px;
 }

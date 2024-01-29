@@ -6,7 +6,9 @@
     
     @* Birds list *@
     <div class="birds-list-section">
-        .
+        <div id="birdsList">
+            
+        </div>
     </div>
     
     <div class="text-center">
@@ -74,5 +76,36 @@
             }
         });
     
+    </script>
+
+    @* Birds list init *@
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function (){
+            
+            // Get list element 
+            var birdsList = document.getElementById('birdsList');
+            
+            console.log("xd");
+            
+            // Load birds list from text file
+            fetch('../Data/birdsList.txt')
+                .then(response => response.text())
+                .then(data => {
+                    
+                    // Split data on brake line 
+                    var itemsList = data.split('\n');
+                    
+                    // Create list element and add it to list
+                    itemsList.forEach(function (item) {
+                        var listItem = document.createElement('div');
+                        listItem.textContent = item;
+                        birdsList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Błąd podczas wczytywania pliku: ' + error));
+            
+            });
+        
     </script>
 }
