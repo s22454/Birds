@@ -1,38 +1,57 @@
-﻿@using Birds.EntityFramework.Entities
-@model PredictionViewModel
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
+    
+    /* Page variables */
+    bool listVisible = true;
 }
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-<div class="container-fluid">
-    <div class="row content">
-        <div class="col-sm-3 sidenav">
-            <h4>Menu</h4>
-            <ul class="nav nav-pills nav-stacked">
-                <li class="active">
-                    <a asp-action="List">Lista predykcji</a>
-                </li>
-            </ul>
+<div class="main-section">
+    
+    <div class="side-panel-container">
+        
+        <div class="side-panel-menu">
+            
+            <div id="birdsListMenuItem" class="side-panel-menu-item side-panel-menu-item-active" onclick="toggleClass(0)">
+                Birds List
+            </div>
+            
+            <div id="predictionsListMenuItem" class="side-panel-menu-item" onclick="toggleClass(1)">
+                Lista Predykcji
+            </div>
+            
         </div>
 
-        <div class="col-sm-9">
-            <img id="uploadedImage" src="#" alt="Wgrany obrazek" width="150" height="150">
+        <div id="birdsList">
 
-            <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="fileInput">
-                <input type="submit" value="Prześlij plik">
-            </form>
-
-            <div id="result"></div>
         </div>
+
+        <div id="predictions" class="disabled">
+            xddddddddd
+        </div>
+
     </div>
+    
+    <div class="file-section">
+        
+        <div>
+            <img id="uploadedImage" alt="Przesłany plik"/>
+        </div>
+        
+        <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput">
+            <input type="submit" value="Prześlij plik">
+        </form>
+        
+    </div>
+    
 </div>
+
 
 @section Scripts
 {
+
+
+
     @* Set image preview *@
     <script>
         function previewImage() {
@@ -84,31 +103,55 @@
     </script>
 
     @* Birds list init *@
-    @* <script> *@
-    @*      *@
-    @*     document.addEventListener('DOMContentLoaded', function (){ *@
-    @*          *@
-    @*         // Get list element  *@
-    @*         let birdsList = document.getElementById('birdsList'); *@
-    @*          *@
-    @*         // Load birds list from text file *@
-    @*         fetch('../Data/birdsList.txt') *@
-    @*             .then(response => response.text()) *@
-    @*             .then(data => { *@
-    @*                  *@
-    @*                 // Split data on brake line  *@
-    @*                 let itemsList = data.split('\n'); *@
-    @*                  *@
-    @*                 // Create list element and add it to list *@
-    @*                 itemsList.forEach(function (item) { *@
-    @*                     let listItem = document.createElement('div'); *@
-    @*                     listItem.textContent = item; *@
-    @*                     birdsList.appendChild(listItem); *@
-    @*                 }); *@
-    @*             }) *@
-    @*             .catch(error => console.error('Błąd podczas wczytywania pliku: ' + error)); *@
-    @*          *@
-    @*         }); *@
-    @*      *@
-    @* </script> *@
+    <script>
+    
+        document.addEventListener('DOMContentLoaded', function (){
+    
+            // Get list element
+            let birdsList = document.getElementById('birdsList');
+    
+            // Load birds list from text file
+            fetch('../Data/birdsList.txt')
+                .then(response => response.text())
+                .then(data => {
+    
+                    // Split data on brake line
+                    let itemsList = data.split('\n');
+    
+                    // Create list element and add it to list
+                    itemsList.forEach(function (item) {
+                        let listItem = document.createElement('div');
+                        listItem.textContent = item;
+                        birdsList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Błąd podczas wczytywania pliku: ' + error));
+    
+            });
+    
+    </script>
+
+    @* Change list visibility *@
+    <script>
+            
+        function toggleClass(x) {
+            if (x === 0)
+            {
+                document.getElementById("birdsList").classList.remove('disabled');
+                document.getElementById("birdsListMenuItem").classList.add('side-panel-menu-item-active');
+                document.getElementById("predictions").classList.add('disabled');
+                document.getElementById("predictionsListMenuItem").classList.remove('side-panel-menu-item-active');
+            }
+            else 
+            {
+                document.getElementById("birdsList").classList.add('disabled');
+                document.getElementById("birdsListMenuItem").classList.remove('side-panel-menu-item-active');
+                document.getElementById("predictions").classList.remove('disabled');
+                document.getElementById("predictionsListMenuItem").classList.add('side-panel-menu-item-active');
+            }
+        }
+        
+       
+    </script>
+
 }
