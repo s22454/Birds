@@ -10,7 +10,6 @@ public class BirdsRepository : IBirdsRepository
 {
     private BirdsContext _birdsContext;
     private DataLoader _dataLoader;
-    private string _modelPath = "ML/BirdModel24.model";
     private Model? _model;
 
     public BirdsRepository(BirdsContext birdsContext, DataLoader dataLoader)
