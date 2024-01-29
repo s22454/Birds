@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="~/Website.styles.css" asp-append-version="true"/>
 </head>
 <body>
+
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BirdsIdentifier</a>
+    <nav class="header-container">
+        <div class="header-title-container">
+            <a class="header-title" asp-area="" asp-controller="Home" asp-action="Index">BirdsIdentifier</a>
         </div>
     </nav>
 </header>
@@ -21,8 +22,8 @@
     @RenderBody()
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
+<footer>
+    <div class="footer-container">
         &copy; 2024 - BirdsIdentifier | ASI Maciej Zajączkowski s20806 Mateusz Sasor-Adamczyk s22454
     </div>
 </footer>
