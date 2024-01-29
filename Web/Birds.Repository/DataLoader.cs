@@ -4,14 +4,10 @@ namespace Birds.Repository;
 
 public class DataLoader
 {
-    private const string ModelName = "BirdsModel24v2.zip";
+    public const string ModelName = "bigtest1.zip";
     const string ModelPath = $"ML/{ModelName}";
     
     public Model Model { get; set; }
-
-    public DataLoader()
-    {
-    }
 
     public void Load(BirdsContext birdsContext)
     {

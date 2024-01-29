@@ -19,7 +19,12 @@ public class BirdsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        return View();
+        PredictionViewModel viewModel = new()
+        {
+            Predictions = await _birdsRepository.GetPredictions()
+        };
+        
+        return View(viewModel);
     }
 
     [HttpGet("list")]

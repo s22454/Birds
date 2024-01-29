@@ -71,7 +71,7 @@ public class BirdsRepository : IBirdsRepository
         {
             Guid model = 
                 await _birdsContext.Models
-                    .Where(x => x.Name == "BirdModel24.model")
+                    .Where(x => x.Name == DataLoader.ModelName)
                     .Select(x => x.Id)
                     .FirstOrDefaultAsync();
 
