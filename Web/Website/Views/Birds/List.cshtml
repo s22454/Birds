@@ -1,0 +1,38 @@
+﻿@using Birds.EntityFramework.Entities
+@model PredictionViewModel
+
+@{
+    ViewData["Title"] = "List Predictions";
+}
+
+@if (Model.Predictions.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Bird Name</th>
+                <th>Time Spent</th>
+                <th>Photo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Prediction prediction in Model.Predictions)
+            {
+                <tr>
+                    <td>@prediction.Id</td>
+                    <td>@prediction.BirdName</td>
+                    <td>@prediction.TimeSpent</td>
+                    <td>
+                        @if (prediction.Photo != null)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(prediction.Photo.Data)" alt="Photo" width="150" height="150" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index">Wróc do predykcji</a>

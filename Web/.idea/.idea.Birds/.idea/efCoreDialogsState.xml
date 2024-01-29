@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EfCoreDialogsState">
+    <option name="keyValueStorage">
+      <map>
+        <entry key="Common:54a07121-f3de-44b3-80d2-1fbc0c4c7c68:dbContext" value="Birds.EntityFramework.Contexts.BirdsContext" />
+        <entry key="Common:buildConfiguration" value="Debug" />
+        <entry key="Common:ce6c014b-902f-4854-807c-1bd9a3144066:dbContext" value="Birds.EntityFramework.Contexts.BirdsContext" />
+        <entry key="Common:noBuild" value="false" />
+        <entry key="Common:outputFolder" value="Migrations" />
+        <entry key="Common:useDefaultConnection" value="true" />
+      </map>
+    </option>
+  </component>
+</project>

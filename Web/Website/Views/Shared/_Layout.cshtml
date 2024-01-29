@@ -13,7 +13,7 @@
 <header>
     <nav class="header-container">
         <div class="header-title-container">
-            <a class="header-title" asp-area="" asp-controller="Home" asp-action="Index">BirdsIdentifier</a>
+            <a class="header-title" asp-area="" asp-controller="Birds" asp-action="Index">BirdsIdentifier</a>
         </div>
     </nav>
 </header>
@@ -22,10 +22,8 @@
     @RenderBody()
 </div>
 
-<footer>
-    <div class="footer-container">
-        &copy; 2024 - BirdsIdentifier | ASI Maciej Zajączkowski s20806 Mateusz Sasor-Adamczyk s22454
-    </div>
+<footer class="container-fluid">
+    <p>&copy; 2024 - BirdsIdentifier | ASI Maciej Zajączkowski s20806 Mateusz Sasor-Adamczyk s22454</p>
 </footer>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

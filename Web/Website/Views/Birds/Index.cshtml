@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-3 sidenav">
+            <h4>Menu</h4>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active">
+                    <a asp-action="List">Lista predykcji</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9">
+            <img id="uploadedImage" src="#" alt="Wgrany obrazek" width="150" height="150">
+
+            <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput">
+                <input type="submit" value="Prześlij plik">
+            </form>
+
+            <div id="result"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @* Set image preview *@
+    <script>
+        function previewImage() {
+            const fileInput = document.getElementById('fileInput');
+            let uploadedImage = document.getElementById('uploadedImage');
+            
+            const file = fileInput.files[0];
+            if (file) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    uploadedImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+    @* Classify image *@
+    <script>
+        const apiUrl = '/api/checkimage';
+        
+        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            previewImage();
+
+            let formData = new FormData();
+            const fileInput = document.getElementById('fileInput');
+            
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+                
+                fetch('/api/checkimage', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('result').textContent = data;
+                })
+                .catch(error => {
+                    console.error('Błąd:', error);
+                });
+            }
+        });
+    
+    </script>
+
+    @* Birds list init *@
+    @* <script> *@
+    @*      *@
+    @*     document.addEventListener('DOMContentLoaded', function (){ *@
+    @*          *@
+    @*         // Get list element  *@
+    @*         let birdsList = document.getElementById('birdsList'); *@
+    @*          *@
+    @*         // Load birds list from text file *@
+    @*         fetch('../Data/birdsList.txt') *@
+    @*             .then(response => response.text()) *@
+    @*             .then(data => { *@
+    @*                  *@
+    @*                 // Split data on brake line  *@
+    @*                 let itemsList = data.split('\n'); *@
+    @*                  *@
+    @*                 // Create list element and add it to list *@
+    @*                 itemsList.forEach(function (item) { *@
+    @*                     let listItem = document.createElement('div'); *@
+    @*                     listItem.textContent = item; *@
+    @*                     birdsList.appendChild(listItem); *@
+    @*                 }); *@
+    @*             }) *@
+    @*             .catch(error => console.error('Błąd podczas wczytywania pliku: ' + error)); *@
+    @*          *@
+    @*         }); *@
+    @*      *@
+    @* </script> *@
+}

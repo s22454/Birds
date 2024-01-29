@@ -268,4 +268,11 @@ public class Model
         _trainedModel = _mlContext.Model.Load(path, out modelSchema);
         return modelSchema;
     }
+    
+    public DataViewSchema LoadModel(Stream stream)
+    {
+        DataViewSchema modelSchema;
+        _trainedModel = _mlContext.Model.Load(stream, out modelSchema);
+        return modelSchema;
+    }
 }

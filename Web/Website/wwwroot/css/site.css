@@ -18,7 +18,11 @@ html {
 }
 
 body {
-
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 /* Header */
@@ -84,6 +88,8 @@ footer {
   z-index: -1;
   border-top: 1px solid #dcdcdc;
   box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  text-align-last: center;
 }
 
 .footer-container {
