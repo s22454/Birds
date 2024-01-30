@@ -135,7 +135,9 @@ body {
 }
 
 #predictions {
-    padding-left: 15px;
+  overflow-y: auto;
+  white-space: nowrap;
+  padding-left: 15px;
 }
 
 .prediction-bird-image{
