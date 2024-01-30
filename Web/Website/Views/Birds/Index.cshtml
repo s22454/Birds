@@ -4,9 +4,6 @@
 
 @{
     ViewData["Title"] = "Home Page";
-
-    /* Page variables */
-    bool listVisible = true;
 }
 
 <div class="main-section">
@@ -43,10 +40,21 @@
     </div>
 
     <div class="file-section">
-        <div style="width: 50%; height: 50%">
-            <div>
-                <img id="uploadedImage" alt="Przesłany plik"/>
+        
+        <div class="file-drop-container">
+            <div class="file-box">
+                
+                <div id="tmpIcon">
+                    <img class="upload-icon" src="img/upload.png">
+                    
+                    <a>Upuść plik lub</a>
+                    <br/>
+                    <a>wybierz z komputera</a>
+                </div>
+                
+                <img id="uploadedImage" class="disabled"/>
             </div>
+            
             <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
                 <input type="file" name="file" id="fileInput">
                 <input type="submit" value="Prześlij plik">
@@ -66,6 +74,9 @@
         function previewImage() {
             const fileInput = document.getElementById('fileInput');
             let uploadedImage = document.getElementById('uploadedImage');
+            
+            document.getElementById('tmpIcon').classList.add('disabled');
+            document.getElementById('uploadedImage').classList.remove('disabled');
             
             const file = fileInput.files[0];
             if (file) {
