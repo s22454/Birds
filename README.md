@@ -25,6 +25,10 @@ Kolejnym krokiem jest właściwe stworzenie i uruchomienie kontenera.
 docker run --name "BirdsMsSQLServer" -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Bardzomocnehaslo1" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
 ```
 
+### Wytrenowany model 
+
+Aby zapewnić poprawne działanie aplikacji plik z wytrenowanym modelem *bigtest1.zip* należy umieścić w pod-projekcie *Website* w folderze *ML*. 
+
 ### Instalacja zależności 
 
 IDE powinno automatycznie rozpoznać i zainstalować wszystkie potrzebne pakiety za pomocą NuGet managera. Jedyny wyjątek stanowi pakiet EntityFramework tools który, należy zainstalować na poziomie globalnym. 
