@@ -27,15 +27,6 @@
         </div>
 
         <div id="predictions" class="disabled">
-            @foreach (Prediction prediction in Model.Predictions)
-            {
-                <div>
-                    <strong>Nazwa ptaka:</strong> @prediction.BirdName <br>
-                    <strong>Data predykcji:</strong> @prediction.TimeSpent <br>
-                    <strong>Obraz:</strong> <img class="prediction-bird-image" src="data:image/jpeg;base64,@Convert.ToBase64String(prediction.Photo.Data)" alt="Bird Image"/> <br>
-                    <hr>
-                </div>
-            }
         </div>
     </div>
 
@@ -95,7 +86,7 @@
     <script>
         const apiUrl = '/api/checkimage';
         
-        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             
             previewImage();
@@ -118,6 +109,7 @@
                     console.error('Błąd:', error);
                 });
             }
+            await renderBirdPredictions();
         });
     
     </script>
@@ -138,30 +130,32 @@
                 .catch(error => console.error('Błąd podczas pobierania danych z API: ' + error));
             });
         
-        // document.addEventListener('DOMContentLoaded', async function () {
-        //     let birdsList = document.getElementById('predictions');
-        //
-        //     try {
-        //         const response = await fetch('/api/predictions');
-        //         const data = await response.json();
-        //
-        //         // data powinna być tablicą obiektów reprezentujących predykcje
-        //         // Zakładam, że każdy obiekt ma właściwości "name", "timespent" i "image"
-        //
-        //         // Tworzenie listy elementów i dodawanie ich do listy
-        //         data.forEach(function (prediction) {
-        //             let listItem = document.createElement('div');
-        //             listItem.innerHTML = `
-        //                 <strong>Name:</strong> ${prediction.birdName}<br>
-        //                 <strong>Time Spent:</strong> ${prediction.timeSpent}<br>
-        //                 <strong>Image:</strong> <img src="${prediction.photo.data}" alt="Bird Image">
-        //             `;
-        //             birdsList.appendChild(listItem);
-        //         });
-        //     } catch (error) {
-        //         console.error('Błąd podczas pobierania danych z API: ' + error);
-        //     }
-        // });
+        document.addEventListener('DOMContentLoaded', async function () {
+            renderBirdPredictions();
+        });
+        
+        async function renderBirdPredictions() {
+            try {
+                const birdsList = document.getElementById('predictions');
+                const response = await fetch('/api/predictions');
+                const data = await response.json();
+                birdsList.innerHTML = '';
+                const list = document.createElement('ul');
+                data.forEach(function (prediction) {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <strong>Nazwa ptaka:</strong> ${prediction.name}<br>
+                        <strong>Data:</strong> ${prediction.date}<br>
+                        <strong>Obraz:</strong> <img class="prediction-bird-image" src="data:image/jpeg;base64,${prediction.base64}" alt="Bird Image">
+                    `;
+                    list.appendChild(listItem);
+                });
+                birdsList.appendChild(list);
+            } catch (error) {
+                console.error('Error fetching or rendering bird predictions:', error);
+            }
+
+        }
     </script>
 
     @* Change list visibility *@

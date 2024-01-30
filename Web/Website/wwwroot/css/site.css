@@ -85,7 +85,7 @@ body {
 .side-panel-container {
   display: flex;
   flex-direction: column;
-  width: 20vw;
+  width: 25vw;
   height: 100%;
   background-color: #f7f7f7;
   box-shadow: 2px 0 4px 0 rgba(0, 0, 0, 0.2);
@@ -142,8 +142,9 @@ body {
 }
 
 .prediction-bird-image{
-  max-width: 45px;
-  max-height: 45px;
+  width: 3.5rem;
+  height: auto;
+  max-height: 1.5rem;
 }
 
 /* File section */

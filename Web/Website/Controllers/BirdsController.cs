@@ -19,19 +19,27 @@ public class BirdsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        PredictionViewModel viewModel = new()
-        {
-            Predictions = await _birdsRepository.GetPredictions()
-        };
-        
-        return View(viewModel);
+        return View();
     }
 
     [HttpGet("~/api/predictions")]
     public async Task<IActionResult> GetPredictions()
     {
         List<Prediction> predictions = await _birdsRepository.GetPredictions();
-        return Json(predictions);
+        List<PredictionResult> predictionResults = new();
+        foreach (Prediction prediction in predictions)
+        {
+            string base64String = Convert.ToBase64String(prediction.Photo.Data);
+
+            PredictionResult result = new()
+            {
+                Name = prediction.BirdName,
+                Date = prediction.TimeSpent.ToString("dd.MM.yyyy HH:mm:ss"),
+                Base64 = base64String
+            };
+            predictionResults.Add(result);
+        }
+        return Json(predictionResults);
     }
     
     [HttpGet("~/api/birds")]
