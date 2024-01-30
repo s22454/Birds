@@ -1,24 +1,28 @@
-﻿@{
+﻿@using Birds.EntityFramework.Entities
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model PredictionViewModel
+
+@{
     ViewData["Title"] = "Home Page";
-    
+
     /* Page variables */
     bool listVisible = true;
 }
 
 <div class="main-section">
-    
+
     <div class="side-panel-container">
-        
+
         <div class="side-panel-menu">
-            
+
             <div id="birdsListMenuItem" class="side-panel-menu-item side-panel-menu-item-active" onclick="toggleClass(0)">
                 Birds List
             </div>
-            
+
             <div id="predictionsListMenuItem" class="side-panel-menu-item" onclick="toggleClass(1)">
                 Lista Predykcji
             </div>
-            
+
         </div>
 
         <div id="birdsList">
@@ -26,32 +30,37 @@
         </div>
 
         <div id="predictions" class="disabled">
-            xddddddddd
+            @foreach (Prediction prediction in Model.Predictions)
+            {
+                <div>
+                    <strong>Nazwa ptaka:</strong> @prediction.BirdName <br>
+                    <strong>Data predykcji:</strong> @prediction.TimeSpent <br>
+                    <strong>Obraz:</strong> <img class="prediction-bird-image" src="data:image/jpeg;base64,@Convert.ToBase64String(prediction.Photo.Data)" alt="Bird Image"/> <br>
+                    <hr>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="file-section">
+        <div style="width: 50%; height: 50%">
+            <div>
+                <img id="uploadedImage" alt="Przesłany plik"/>
+            </div>
+            <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput">
+                <input type="submit" value="Prześlij plik">
+            </form>
         </div>
 
+        <div id="result"></div>
     </div>
-    
-    <div class="file-section">
-        
-        <div>
-            <img id="uploadedImage" alt="Przesłany plik"/>
-        </div>
-        
-        <form id="uploadForm" action="/api/checkimage" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="fileInput">
-            <input type="submit" value="Prześlij plik">
-        </form>
-        
-    </div>
-    
+
 </div>
 
 
 @section Scripts
 {
-
-
-
     @* Set image preview *@
     <script>
         function previewImage() {
@@ -104,36 +113,48 @@
 
     @* Birds list init *@
     <script>
-    
         document.addEventListener('DOMContentLoaded', function (){
-    
-            // Get list element
             let birdsList = document.getElementById('birdsList');
-    
-            // Load birds list from text file
-            fetch('../Data/birdsList.txt')
-                .then(response => response.text())
+            fetch('/api/birds')
+                .then(response => response.json())
                 .then(data => {
-    
-                    // Split data on brake line
-                    let itemsList = data.split('\n');
-    
-                    // Create list element and add it to list
-                    itemsList.forEach(function (item) {
+                    data.forEach(function (bird) {
                         let listItem = document.createElement('div');
-                        listItem.textContent = item;
+                        listItem.textContent = bird.name;
                         birdsList.appendChild(listItem);
                     });
                 })
-                .catch(error => console.error('Błąd podczas wczytywania pliku: ' + error));
-    
+                .catch(error => console.error('Błąd podczas pobierania danych z API: ' + error));
             });
-    
+        
+        // document.addEventListener('DOMContentLoaded', async function () {
+        //     let birdsList = document.getElementById('predictions');
+        //
+        //     try {
+        //         const response = await fetch('/api/predictions');
+        //         const data = await response.json();
+        //
+        //         // data powinna być tablicą obiektów reprezentujących predykcje
+        //         // Zakładam, że każdy obiekt ma właściwości "name", "timespent" i "image"
+        //
+        //         // Tworzenie listy elementów i dodawanie ich do listy
+        //         data.forEach(function (prediction) {
+        //             let listItem = document.createElement('div');
+        //             listItem.innerHTML = `
+        //                 <strong>Name:</strong> ${prediction.birdName}<br>
+        //                 <strong>Time Spent:</strong> ${prediction.timeSpent}<br>
+        //                 <strong>Image:</strong> <img src="${prediction.photo.data}" alt="Bird Image">
+        //             `;
+        //             birdsList.appendChild(listItem);
+        //         });
+        //     } catch (error) {
+        //         console.error('Błąd podczas pobierania danych z API: ' + error);
+        //     }
+        // });
     </script>
 
     @* Change list visibility *@
     <script>
-            
         function toggleClass(x) {
             if (x === 0)
             {
@@ -150,8 +171,6 @@
                 document.getElementById("predictionsListMenuItem").classList.add('side-panel-menu-item-active');
             }
         }
-        
-       
     </script>
 
 }

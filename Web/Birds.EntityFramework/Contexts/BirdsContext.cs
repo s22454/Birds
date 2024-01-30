@@ -12,6 +12,7 @@ public class BirdsContext : DbContext
     public DbSet<Prediction> Predictions { get; set; }
     public DbSet<Photo> Photos { get; set; }
     public DbSet<Model> Models { get; set; }
+    public DbSet<Bird> Birds { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -37,6 +38,11 @@ public class BirdsContext : DbContext
             x.HasMany(model => model.Predictions)
                 .WithOne(prediction => prediction.Model)
                 .HasForeignKey(prediction => prediction.ModelId);
+        });
+        
+        modelBuilder.Entity<Bird>(x =>
+        {
+            x.Property(p => p.Name).HasColumnType("nvarchar(255)");
         });
     }
 }

@@ -110,4 +110,10 @@ public class BirdsRepository : IBirdsRepository
             await _birdsContext.SaveChangesAsync();
         }
     }
+
+    public async Task<List<Bird>> GetBirds()
+    {
+        List<Bird> result = await _birdsContext.Birds.ToListAsync();
+        return result.OrderBy(x => x.Name).ToList();
+    }
 }

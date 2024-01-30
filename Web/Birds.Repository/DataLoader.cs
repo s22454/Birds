@@ -1,4 +1,5 @@
 ﻿using Birds.EntityFramework.Contexts;
+using Birds.EntityFramework.Entities;
 
 namespace Birds.Repository;
 
@@ -36,6 +37,26 @@ public class DataLoader
         else
         {
             model = birdsContext.Models.FirstOrDefault(x => x.Name == ModelName);
+        }
+
+        if (!birdsContext.Birds.Any())
+        {
+            string filePath = "ML/birds.txt";
+            List<Bird> birds = new List<Bird>();
+            
+            using StreamReader reader = new(filePath);
+            while (reader.ReadLine() is { } line)
+            {
+                Bird bird = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = line.Trim()
+                };
+                birds.Add(bird);
+            }
+            
+            birdsContext.Birds.AddRange(birds);
+            birdsContext.SaveChanges();
         }
         
         using MemoryStream memoryStream = new(model.Data);

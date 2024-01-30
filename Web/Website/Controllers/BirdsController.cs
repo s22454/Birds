@@ -27,15 +27,18 @@ public class BirdsController : Controller
         return View(viewModel);
     }
 
-    [HttpGet("list")]
-    public async Task<IActionResult> List()
+    [HttpGet("~/api/predictions")]
+    public async Task<IActionResult> GetPredictions()
     {
-        PredictionViewModel viewModel = new()
-        {
-            Predictions = await _birdsRepository.GetPredictions()
-        };
-        
-        return View(viewModel);
+        List<Prediction> predictions = await _birdsRepository.GetPredictions();
+        return Json(predictions);
+    }
+    
+    [HttpGet("~/api/birds")]
+    public async Task<IActionResult> GetBirds()
+    {
+        List<Bird> birds = await _birdsRepository.GetBirds();
+        return Json(birds);
     }
 
     [HttpPost("~/api/deleteimage")]
@@ -61,7 +64,7 @@ public class BirdsController : Controller
     
     [HttpGet("error")]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public async Task<IActionResult> Error()
+    public IActionResult Error()
     {
         return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
     }

@@ -8,4 +8,5 @@ public interface IBirdsRepository
     public Task<List<Prediction>> GetPredictions();
     public Task<string> PredictImage(IFormFile file);
     public Task DeletePhoto(Guid id);
+    public Task<List<Bird>> GetBirds();
 }

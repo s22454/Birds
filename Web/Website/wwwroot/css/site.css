@@ -118,6 +118,16 @@ body {
   white-space: nowrap;
   width: 100%;
   font-size: 14px;
+  padding-left: 15px;
+}
+
+#predictions {
+    padding-left: 15px;
+}
+
+.prediction-bird-image{
+  max-width: 45px;
+  max-height: 45px;
 }
 
 /* File section */
